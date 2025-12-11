@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="Content-Security-Policy" 
+          content="default-src 'self'; 
+                   script-src 'self' 'unsafe-inline' blob: data:; 
+                   style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+                   font-src 'self' https://fonts.gstatic.com;
+                   img-src 'self' data: blob:;
+                   connect-src 'self' ws: wss:;">
+    <title>♡ Soft Hacker OS ♡</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="header-brand">
+                <h1 class="header-title">♡ Hacker Game ♡</h1>
+            </div>
+            <div class="header-controls">
+                <button class="icon-btn" id="themeToggle" title="Toggle Theme" aria-label="Toggle theme" aria-pressed="false">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="settingsBtn" title="Settings" aria-label="Open settings" aria-expanded="false">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <circle cx="12" cy="12" r="3"></circle>
+                        <path d="M12 1v6m0 6v6M5.64 5.64l4.24 4.24m4.24 4.24l4.24 4.24M1 12h6m6 0h6M5.64 18.36l4.24-4.24m4.24-4.24l4.24-4.24"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn" id="profileBtn" title="Profile" aria-label="Open profile" aria-expanded="false">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="4"></circle>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <nav class="sidebar-nav" role="navigation" aria-label="Main navigation">
+                <a href="#" class="nav-item active" data-tab="dashboard" role="tab" aria-label="Dashboard" aria-selected="true" tabindex="0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="terminal" role="tab" aria-label="Terminal" aria-selected="false" tabindex="0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <polyline points="4 17 10 11 4 5"></polyline>
+                        <line x1="12" y1="19" x2="20" y2="19"></line>
+                    </svg>
+                    <span>Terminal</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="missions" role="tab" aria-label="Missions" aria-selected="false" tabindex="0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                    <span>Missions</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="logs" role="tab" aria-label="System logs" aria-selected="false" tabindex="0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="16" y1="13" x2="8" y2="13"></line>
+                        <line x1="16" y1="17" x2="8" y2="17"></line>
+                        <polyline points="10 9 9 9 8 9"></polyline>
+                    </svg>
+                    <span>Logs</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="inbox" role="tab" aria-label="Inbox" aria-selected="false" tabindex="0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>
+                        <polyline points="22,6 12,13 2,6"></polyline>
+                    </svg>
+                    <span>Inbox</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="system" role="tab" aria-label="System settings" aria-selected="false" tabindex="0">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+                        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+                        <line x1="8" y1="21" x2="16" y2="21"></line>
+                        <line x1="12" y1="17" x2="12" y2="21"></line>
+                    </svg>
+                    <span>System</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Tab Content -->
+            <div class="tab-content">
+                <!-- Dashboard Tab -->
+                <div class="tab-panel active" id="dashboard-panel">
+                    <!-- Welcome Screen (First Time) -->
+                    <div class="welcome-screen" id="welcomeScreen">
+                        <div class="welcome-content">
+                            <div class="welcome-icon">♡</div>
+                            <h1 class="welcome-title">Welcome to Soft Hacker OS ♡</h1>
+                            <p class="welcome-text">A cute hacker simulator game where you complete missions by using terminal commands!</p>
+                            
+                            <div class="welcome-guide">
+                                <h3>🎮 How to Play:</h3>
+                                <ol class="guide-steps">
+                                    <li><strong>Check Missions</strong> - Go to Missions tab to see available tasks</li>
+                                    <li><strong>Use Terminal</strong> - Type commands like <code>scan</code>, <code>bruteforce</code>, <code>decrypt</code></li>
+                                    <li><strong>Complete Steps</strong> - Each command completes mission steps automatically</li>
+                                    <li><strong>Earn XP</strong> - Complete missions to earn XP and level up!</li>
+                                    <li><strong>Unlock More</strong> - Finish missions to unlock new challenges</li>
+                                </ol>
+                                
+                                <h3>💻 Available Commands:</h3>
+                                <div class="commands-list">
+                                    <code>help</code> - Show all commands<br>
+                                    <code>scan</code> - Scan network for targets<br>
+                                    <code>bruteforce</code> - Crack passwords<br>
+                                    <code>decrypt [file]</code> - Decrypt files<br>
+                                    <code>ping [host]</code> - Ping network host<br>
+                                    <code>missions</code> - List missions<br>
+                                    <code>whoami</code> - Show profile info
+                                </div>
+                                
+                                <h3>🎯 Game Goal:</h3>
+                                <p class="goal-text">Complete all missions, earn XP, level up, and become the ultimate soft hacker! Each mission teaches you different hacking techniques through fun terminal commands.</p>
+                            </div>
+                            
+                            <div class="welcome-actions">
+                                <button class="welcome-btn" onclick="closeWelcome()">Let's Start! ♡</button>
+                                <button class="welcome-btn-secondary" onclick="closeWelcome()">Skip Tutorial</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="dashboard-container" id="dashboardContent" style="display: none;">
+                        <h2 class="section-title">Dashboard</h2>
+                        <div class="dashboard-grid">
+                            <div class="stat-card">
+                                <div class="stat-icon">⭐</div>
+                                <div class="stat-content">
+                                    <div class="stat-value" id="statXP">0</div>
+                                    <div class="stat-label">Total XP</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">🎯</div>
+                                <div class="stat-content">
+                                    <div class="stat-value" id="statLevel">1</div>
+                                    <div class="stat-label">Level</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">✅</div>
+                                <div class="stat-content">
+                                    <div class="stat-value" id="statMissions">0</div>
+                                    <div class="stat-label">Missions Completed</div>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">🔥</div>
+                                <div class="stat-content">
+                                    <div class="stat-value" id="statActive">0</div>
+                                    <div class="stat-label">Active Missions</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dashboard-section">
+                            <h3 class="dashboard-subtitle">Recent Activity</h3>
+                            <div class="activity-list" id="activityList">
+                                <div class="activity-item">
+                                    <span class="activity-time">Just now</span>
+                                    <span class="activity-text">System initialized ♡</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dashboard-section">
+                            <h3 class="dashboard-subtitle">Quick Actions</h3>
+                            <div class="quick-actions">
+                                <button class="action-btn" onclick="switchTab('terminal')">
+                                    <span>💻</span>
+                                    <span>Open Terminal</span>
+                                </button>
+                                <button class="action-btn" onclick="switchTab('missions')">
+                                    <span>🎯</span>
+                                    <span>View Missions</span>
+                                </button>
+                                <button class="action-btn" onclick="switchTab('system')">
+                                    <span>🛠️</span>
+                                    <span>System Tools</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Terminal Tab -->
+                <div class="tab-panel" id="terminal-panel">
+                    <div class="terminal-container">
+                        <div class="terminal-header">
+                            <div class="terminal-dots">
+                                <span class="dot dot-red"></span>
+                                <span class="dot dot-yellow"></span>
+                                <span class="dot dot-green"></span>
+                            </div>
+                            <span class="terminal-title">soft-hacker@terminal ~</span>
+                        </div>
+                        <div class="terminal-body" id="terminalBody" role="log" aria-label="Terminal output" aria-live="polite" aria-atomic="false">
+                            <div class="terminal-line">
+                                <span class="terminal-prompt">soft-hacker@terminal:~$</span>
+                                <span class="terminal-text">Welcome to Soft Hacker OS ♡</span>
+                            </div>
+                            <div class="terminal-line">
+                                <span class="terminal-prompt">soft-hacker@terminal:~$</span>
+                                <span class="terminal-text">Type 'help' to see available commands</span>
+                            </div>
+                        </div>
+                        <div class="terminal-input-container">
+                            <span class="terminal-prompt" aria-hidden="true">soft-hacker@terminal:~$</span>
+                            <input type="text" class="terminal-input" id="terminalInput" autocomplete="off" spellcheck="false" 
+                                   aria-label="Terminal command input" placeholder="Enter command..." role="textbox">
+                            <span class="terminal-cursor" aria-hidden="true">█</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Missions Tab -->
+                <div class="tab-panel" id="missions-panel">
+                    <div class="missions-container">
+                        <h2 class="section-title">Active Missions</h2>
+                        <div class="missions-grid" id="missionsGrid" role="grid" aria-label="Available missions">
+                            <!-- Missions will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Logs Tab -->
+                <div class="tab-panel" id="logs-panel">
+                    <div class="logs-container">
+                        <h2 class="section-title">System Logs</h2>
+                        <div class="logs-content" id="logsContent">
+                            <div class="log-entry">
+                                <span class="log-time">[2024-01-15 10:23:45]</span>
+                                <span class="log-level info">[INFO]</span>
+                                <span class="log-message">System initialized successfully ♡</span>
+                            </div>
+                            <div class="log-entry">
+                                <span class="log-time">[2024-01-15 10:23:46]</span>
+                                <span class="log-level success">[SUCCESS]</span>
+                                <span class="log-message">Terminal ready for commands</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Inbox Tab -->
+                <div class="tab-panel" id="inbox-panel">
+                    <div class="inbox-container">
+                        <h2 class="section-title">Message Inbox</h2>
+                        <div class="inbox-list" id="inboxList">
+                            <div class="inbox-item">
+                                <div class="inbox-icon">📧</div>
+                                <div class="inbox-content">
+                                    <div class="inbox-header">
+                                        <span class="inbox-sender">System Admin</span>
+                                        <span class="inbox-time">2 hours ago</span>
+                                    </div>
+                                    <div class="inbox-subject">Welcome to Soft Hacker OS ♡</div>
+                                    <div class="inbox-preview">Your first mission is ready...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Tab -->
+                <div class="tab-panel" id="system-panel">
+                    <div class="system-container">
+                        <h2 class="section-title">System Tools</h2>
+                        <div class="tools-grid">
+                            <div class="tool-card">
+                                <div class="tool-icon">🔍</div>
+                                <div class="tool-name">Network Scanner</div>
+                                <div class="tool-desc">Scan for available networks</div>
+                            </div>
+                            <div class="tool-card">
+                                <div class="tool-icon">🔐</div>
+                                <div class="tool-name">Password Cracker</div>
+                                <div class="tool-desc">Brute force password attempts</div>
+                            </div>
+                            <div class="tool-card">
+                                <div class="tool-icon">📡</div>
+                                <div class="tool-name">Signal Interceptor</div>
+                                <div class="tool-desc">Intercept wireless signals</div>
+                            </div>
+                            <div class="tool-card">
+                                <div class="tool-icon">🛡️</div>
+                                <div class="tool-name">Firewall Bypass</div>
+                                <div class="tool-desc">Bypass security protocols</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast" id="toast"></div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Settings</h2>
+                <button class="modal-close" id="settingsClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="setting-group">
+                    <label class="setting-label">Sound Effects</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="soundToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Animations</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="animationsToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Auto-save Progress</label>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="autosaveToggle" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-group">
+                    <label class="setting-label">Terminal Font Size</label>
+                    <select class="setting-select" id="fontSizeSelect">
+                        <option value="12">12px</option>
+                        <option value="14" selected>14px</option>
+                        <option value="16">16px</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profile Modal -->
+    <div class="modal" id="profileModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Profile</h2>
+                <button class="modal-close" id="profileClose">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="profile-avatar">
+                    <div class="avatar-circle">♡</div>
+                </div>
+                <div class="profile-info">
+                    <div class="profile-name" id="profileName">soft-hacker</div>
+                    <div class="profile-role" id="profileRole">Elite Hacker</div>
+                </div>
+                <div class="profile-stats">
+                    <div class="profile-stat">
+                        <span class="stat-label">Level</span>
+                        <span class="stat-value" id="profileLevel">1</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-label">XP</span>
+                        <span class="stat-value" id="profileXP">0</span>
+                    </div>
+                    <div class="profile-stat">
+                        <span class="stat-label">Missions</span>
+                        <span class="stat-value" id="profileMissions">0/5</span>
+                    </div>
+                </div>
+                <div class="profile-badges">
+                    <h3 class="badges-title">Badges</h3>
+                    <div class="badges-list" id="badgesList">
+                        <div class="badge-item locked">🔒</div>
+                        <div class="badge-item locked">🔒</div>
+                        <div class="badge-item locked">🔒</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="src/app.js"></script>
+</body>
+</html>
+

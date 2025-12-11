@@ -1,0 +1,55 @@
+{
+    "app": {
+        "title": "Soft Hacker OS",
+        "welcome": "Selamat Datang di Soft Hacker OS ♡"
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "totalXP": "Total XP",
+        "level": "Level",
+        "missionsCompleted": "Misi Selesai",
+        "activeMissions": "Misi Aktif",
+        "recentActivity": "Aktivitas Terkini",
+        "quickActions": "Aksi Cepat",
+        "openTerminal": "Buka Terminal",
+        "viewMissions": "Lihat Misi",
+        "systemTools": "Alat Sistem"
+    },
+    "terminal": {
+        "title": "Terminal",
+        "prompt": "soft-hacker@terminal:~$",
+        "welcome": "Selamat datang di Soft Hacker OS ♡",
+        "help": "Ketik 'help' untuk melihat perintah yang tersedia",
+        "commandNotFound": "Perintah tidak ditemukan: {{command}}. Ketik 'help' untuk melihat perintah yang tersedia",
+        "cleared": "Terminal dibersihkan ♡"
+    },
+    "missions": {
+        "title": "Misi Aktif",
+        "loading": "Memuat misi...",
+        "started": "Memulai misi: {{title}}",
+        "completed": "Misi selesai! +{{xp}} XP",
+        "unlocked": "Misi baru terbuka: {{title}}"
+    },
+    "settings": {
+        "title": "Pengaturan",
+        "soundEffects": "Efek Suara",
+        "animations": "Animasi",
+        "autosave": "Simpan Otomatis",
+        "fontSize": "Ukuran Font Terminal"
+    },
+    "profile": {
+        "title": "Profil",
+        "level": "Level",
+        "xp": "XP",
+        "missions": "Misi"
+    },
+    "common": {
+        "close": "Tutup",
+        "save": "Simpan",
+        "cancel": "Batal",
+        "loading": "Memuat...",
+        "error": "Terjadi kesalahan",
+        "success": "Berhasil"
+    }
+}
+

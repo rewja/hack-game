@@ -1,0 +1,55 @@
+{
+    "app": {
+        "title": "Soft Hacker OS",
+        "welcome": "Welcome to Soft Hacker OS ♡"
+    },
+    "dashboard": {
+        "title": "Dashboard",
+        "totalXP": "Total XP",
+        "level": "Level",
+        "missionsCompleted": "Missions Completed",
+        "activeMissions": "Active Missions",
+        "recentActivity": "Recent Activity",
+        "quickActions": "Quick Actions",
+        "openTerminal": "Open Terminal",
+        "viewMissions": "View Missions",
+        "systemTools": "System Tools"
+    },
+    "terminal": {
+        "title": "Terminal",
+        "prompt": "soft-hacker@terminal:~$",
+        "welcome": "Welcome to Soft Hacker OS ♡",
+        "help": "Type 'help' to see available commands",
+        "commandNotFound": "Command not found: {{command}}. Type 'help' for available commands",
+        "cleared": "Terminal cleared ♡"
+    },
+    "missions": {
+        "title": "Active Missions",
+        "loading": "Loading missions...",
+        "started": "Starting mission: {{title}}",
+        "completed": "Mission completed! +{{xp}} XP",
+        "unlocked": "New mission unlocked: {{title}}"
+    },
+    "settings": {
+        "title": "Settings",
+        "soundEffects": "Sound Effects",
+        "animations": "Animations",
+        "autosave": "Auto-save Progress",
+        "fontSize": "Terminal Font Size"
+    },
+    "profile": {
+        "title": "Profile",
+        "level": "Level",
+        "xp": "XP",
+        "missions": "Missions"
+    },
+    "common": {
+        "close": "Close",
+        "save": "Save",
+        "cancel": "Cancel",
+        "loading": "Loading...",
+        "error": "An error occurred",
+        "success": "Success"
+    }
+}
+

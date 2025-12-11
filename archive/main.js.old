@@ -1,0 +1,1084 @@
+// ============================================
+// Soft Hacker OS - Main JavaScript
+// ============================================
+
+// Missions Data (embedded to avoid CORS issues)
+const MISSIONS_DATA = [
+    {
+        "id": "mission-01",
+        "title": "Recover Lost Password",
+        "description": "A user has forgotten their password and needs your help to recover it. Use brute force techniques to crack the encrypted password file.",
+        "status": "active",
+        "progress": 0,
+        "steps": [
+            {
+                "id": "step-1",
+                "text": "Scan for password files in the system",
+                "completed": false
+            },
+            {
+                "id": "step-2",
+                "text": "Decrypt the password hash",
+                "completed": false
+            },
+            {
+                "id": "step-3",
+                "text": "Run brute force attack",
+                "completed": false
+            },
+            {
+                "id": "step-4",
+                "text": "Recover and verify password",
+                "completed": false
+            }
+        ],
+        "reward": "50 XP + Hacker Badge"
+    },
+    {
+        "id": "mission-02",
+        "title": "Intercept CuteChat Messages",
+        "description": "Intercept encrypted messages from the CuteChat application. Decode the communication protocol and extract the conversation data.",
+        "status": "active",
+        "progress": 25,
+        "steps": [
+            {
+                "id": "step-1",
+                "text": "Locate CuteChat network traffic",
+                "completed": true
+            },
+            {
+                "id": "step-2",
+                "text": "Capture encrypted packets",
+                "completed": false
+            },
+            {
+                "id": "step-3",
+                "text": "Decode encryption protocol",
+                "completed": false
+            },
+            {
+                "id": "step-4",
+                "text": "Extract message content",
+                "completed": false
+            }
+        ],
+        "reward": "75 XP + Interceptor Badge"
+    },
+    {
+        "id": "mission-03",
+        "title": "Decrypt Pastel Archive",
+        "description": "A mysterious pastel-colored archive has been discovered. Break through its encryption layers and reveal its contents.",
+        "status": "active",
+        "progress": 50,
+        "steps": [
+            {
+                "id": "step-1",
+                "text": "Analyze archive structure",
+                "completed": true
+            },
+            {
+                "id": "step-2",
+                "text": "Identify encryption method",
+                "completed": true
+            },
+            {
+                "id": "step-3",
+                "text": "Crack first encryption layer",
+                "completed": false
+            },
+            {
+                "id": "step-4",
+                "text": "Extract archive contents",
+                "completed": false
+            }
+        ],
+        "reward": "100 XP + Decryptor Badge"
+    },
+    {
+        "id": "mission-04",
+        "title": "Bypass Firewall v3.1",
+        "description": "The latest firewall version is blocking all access attempts. Find vulnerabilities and create a bypass method.",
+        "status": "active",
+        "progress": 0,
+        "steps": [
+            {
+                "id": "step-1",
+                "text": "Scan firewall ports",
+                "completed": false
+            },
+            {
+                "id": "step-2",
+                "text": "Identify security gaps",
+                "completed": false
+            },
+            {
+                "id": "step-3",
+                "text": "Exploit vulnerabilities",
+                "completed": false
+            },
+            {
+                "id": "step-4",
+                "text": "Establish secure connection",
+                "completed": false
+            }
+        ],
+        "reward": "125 XP + Firewall Master Badge"
+    },
+    {
+        "id": "mission-05",
+        "title": "Network Intrusion Detection",
+        "description": "Detect and analyze suspicious network activity. Identify potential threats and secure the system.",
+        "status": "locked",
+        "progress": 0,
+        "steps": [
+            {
+                "id": "step-1",
+                "text": "Monitor network traffic",
+                "completed": false
+            },
+            {
+                "id": "step-2",
+                "text": "Identify anomalies",
+                "completed": false
+            },
+            {
+                "id": "step-3",
+                "text": "Trace threat source",
+                "completed": false
+            },
+            {
+                "id": "step-4",
+                "text": "Implement countermeasures",
+                "completed": false
+            }
+        ],
+        "reward": "150 XP + Security Expert Badge"
+    }
+];
+
+// Global State
+const state = {
+    currentTab: 'dashboard',
+    commandHistory: [],
+    historyIndex: -1,
+    missions: [],
+    logs: [],
+    xp: 0,
+    level: 1,
+    completedMissions: 0,
+    badges: [],
+    settings: {
+        sound: true,
+        animations: true,
+        autosave: true,
+        fontSize: 14
+    },
+    theme: 'light',
+    messages: [
+        {
+            id: 1,
+            sender: 'System Admin',
+            subject: 'Welcome to Soft Hacker OS ♡',
+            preview: 'Your first mission is ready...',
+            time: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+            read: false
+        }
+    ],
+    activities: [
+        {
+            time: new Date().toISOString(),
+            text: 'System initialized ♡'
+        }
+    ]
+};
+
+// ============================================
+// Terminal Engine
+// ============================================
+
+class Terminal {
+    constructor() {
+        this.body = document.getElementById('terminalBody');
+        this.input = document.getElementById('terminalInput');
+        this.commands = {
+            help: this.showHelp.bind(this),
+            clear: this.clearTerminal.bind(this),
+            scan: this.scanNetwork.bind(this),
+            bruteforce: this.bruteforce.bind(this),
+            decrypt: this.decrypt.bind(this),
+            ping: this.ping.bind(this),
+            missions: this.showMissions.bind(this),
+            logs: this.showLogs.bind(this),
+            whoami: this.whoami.bind(this),
+            date: this.showDate.bind(this),
+            echo: this.echo.bind(this)
+        };
+        this.init();
+    }
+
+    init() {
+        this.input.addEventListener('keydown', (e) => this.handleKeyDown(e));
+        this.input.addEventListener('input', () => this.handleInput());
+        this.input.focus();
+    }
+
+    handleKeyDown(e) {
+        if (e.key === 'Enter') {
+            this.executeCommand();
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            this.navigateHistory(-1);
+        } else if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            this.navigateHistory(1);
+        } else if (e.key === 'Tab') {
+            e.preventDefault();
+            this.autocomplete();
+        }
+    }
+
+    handleInput() {
+        // Remove suggestion if exists
+        const suggestion = this.body.querySelector('.terminal-suggestion');
+        if (suggestion) {
+            suggestion.remove();
+        }
+    }
+
+    executeCommand() {
+        const command = this.input.value.trim();
+        if (!command) return;
+
+        // Add to history
+        state.commandHistory.push(command);
+        state.historyIndex = state.commandHistory.length;
+
+        // Display command
+        this.addLine(`soft-hacker@terminal:~$ ${command}`, 'prompt');
+
+        // Execute
+        const [cmd, ...args] = command.split(' ');
+        const handler = this.commands[cmd.toLowerCase()];
+
+        if (handler) {
+            handler(args);
+        } else {
+            this.addLine(`Command not found: ${cmd}. Type 'help' for available commands.`, 'error');
+        }
+
+        // Clear input
+        this.input.value = '';
+    }
+
+    navigateHistory(direction) {
+        if (state.commandHistory.length === 0) return;
+
+        state.historyIndex += direction;
+        
+        if (state.historyIndex < 0) {
+            state.historyIndex = 0;
+        } else if (state.historyIndex >= state.commandHistory.length) {
+            state.historyIndex = state.commandHistory.length;
+            this.input.value = '';
+            return;
+        }
+
+        this.input.value = state.commandHistory[state.historyIndex];
+    }
+
+    autocomplete() {
+        const input = this.input.value.trim();
+        const commands = Object.keys(this.commands);
+        const matches = commands.filter(cmd => cmd.startsWith(input.toLowerCase()));
+
+        if (matches.length === 1) {
+            this.input.value = matches[0];
+        } else if (matches.length > 1) {
+            this.addLine(`Possible completions: ${matches.join(', ')}`, 'info');
+        }
+    }
+
+    addLine(text, type = 'text') {
+        const line = document.createElement('div');
+        line.className = 'terminal-line';
+
+        if (type === 'prompt') {
+            line.innerHTML = `<span class="terminal-prompt">${text}</span>`;
+        } else if (type === 'error') {
+            line.innerHTML = `<span class="terminal-text" style="color: #FF6B9D;">${text}</span>`;
+        } else if (type === 'success') {
+            line.innerHTML = `<span class="terminal-text" style="color: #6BCB77;">${text}</span>`;
+        } else if (type === 'info') {
+            line.innerHTML = `<span class="terminal-text" style="color: #9A7BB3;">${text}</span>`;
+        } else {
+            line.innerHTML = `<span class="terminal-text">${text}</span>`;
+        }
+
+        this.body.appendChild(line);
+        this.scrollToBottom();
+    }
+
+    scrollToBottom() {
+        this.body.scrollTop = this.body.scrollHeight;
+    }
+
+    // Command Handlers
+    showHelp() {
+        const helpText = `
+Available commands:
+  help          - Show this help message
+  clear         - Clear terminal screen
+  scan          - Scan network for targets
+  bruteforce    - Brute force password attack
+  decrypt       - Decrypt encrypted files
+  ping [host]   - Ping a network host
+  missions      - Show available missions
+  logs          - Display system logs
+  whoami        - Show current user
+  date          - Show current date and time
+  echo [text]   - Echo text to terminal
+        `.trim();
+        
+        helpText.split('\n').forEach(line => {
+            this.addLine(line);
+        });
+    }
+
+    clearTerminal() {
+        this.body.innerHTML = '';
+        this.addLine('Terminal cleared ♡', 'success');
+    }
+
+    scanNetwork() {
+        this.addLine('Scanning network...', 'info');
+        
+        setTimeout(() => {
+            this.addLine('Found 3 targets:', 'info');
+            this.addLine('  → 192.168.1.100 (Active)', 'text');
+            this.addLine('  → 192.168.1.101 (Active)', 'text');
+            this.addLine('  → 192.168.1.102 (Firewall Protected)', 'text');
+            this.addLine('Scan complete ✨', 'success');
+            this.addLog('Network scan completed', 'info');
+            
+            // Complete mission step if applicable
+            completeMissionStep('mission-02', 'step-1');
+            completeMissionStep('mission-04', 'step-1');
+        }, 1500);
+    }
+
+    bruteforce(args) {
+        this.addLine('Initializing brute force attack...', 'info');
+        this.addLine('Target: password.hash', 'text');
+        
+        const progress = [20, 45, 70, 90, 100];
+        let current = 0;
+
+        const interval = setInterval(() => {
+            if (current < progress.length) {
+                this.addLine(`Progress: ${progress[current]}%`, 'info');
+                current++;
+            } else {
+                clearInterval(interval);
+                this.addLine('ACCESS GRANTED ♡', 'success');
+                this.addLine('Password recovered: ********', 'success');
+                this.addLog('Brute force attack successful', 'success');
+                showToast('Password recovered successfully!', 'success');
+                
+                // Complete mission step if applicable
+                completeMissionStep('mission-01', 'step-3');
+            }
+        }, 800);
+    }
+
+    decrypt(args) {
+        const file = args[0] || 'archive.enc';
+        this.addLine(`Decrypting ${file}...`, 'info');
+        
+        setTimeout(() => {
+            this.addLine('Analyzing encryption method...', 'text');
+            setTimeout(() => {
+                this.addLine('Cracking encryption layer 1...', 'text');
+                setTimeout(() => {
+                    this.addLine('SYSTEM BYPASSED ✨', 'success');
+                    this.addLine('File decrypted successfully!', 'success');
+                    this.addLog(`Decryption successful: ${file}`, 'success');
+                    showToast('File decrypted!', 'success');
+                    
+                    // Complete mission step if applicable
+                    completeMissionStep('mission-03', 'step-3');
+                }, 1000);
+            }, 1000);
+        }, 500);
+    }
+
+    ping(args) {
+        const host = args[0] || 'localhost';
+        this.addLine(`Pinging ${host}...`, 'info');
+        
+        setTimeout(() => {
+            const time = Math.floor(Math.random() * 50) + 10;
+            this.addLine(`Reply from ${host}: time=${time}ms`, 'success');
+        }, 500);
+    }
+
+    showMissions() {
+        this.addLine('Available Missions:', 'info');
+        state.missions.forEach(mission => {
+            const status = mission.status === 'active' ? 'ACTIVE' : 'LOCKED';
+            const progress = mission.progress || 0;
+            this.addLine(`  [${status}] ${mission.title} - ${progress}%`, 'text');
+        });
+        this.addLine('Type "missions" in sidebar to view details', 'info');
+    }
+
+    showLogs() {
+        this.addLine('Recent System Logs:', 'info');
+        const recentLogs = state.logs.slice(-5);
+        recentLogs.forEach(log => {
+            this.addLine(`  [${log.level}] ${log.message}`, 'text');
+        });
+    }
+
+    whoami() {
+        this.addLine('soft-hacker', 'text');
+        this.addLine('Role: Elite Hacker', 'text');
+        this.addLine(`Level: ${state.level}`, 'text');
+        this.addLine(`XP: ${state.xp}`, 'text');
+        this.addLine(`Missions Completed: ${state.completedMissions}`, 'text');
+    }
+
+    showDate() {
+        const now = new Date();
+        this.addLine(now.toLocaleString('id-ID'), 'text');
+    }
+
+    echo(args) {
+        const text = args.join(' ');
+        this.addLine(text, 'text');
+    }
+
+    addLog(message, level = 'info') {
+        state.logs.push({
+            time: new Date().toISOString(),
+            level: level.toUpperCase(),
+            message: message
+        });
+        updateLogsDisplay();
+    }
+}
+
+// ============================================
+// Mission System
+// ============================================
+
+class MissionSystem {
+    constructor() {
+        this.loadMissions();
+    }
+
+    loadMissions() {
+        // Use embedded missions data to avoid CORS issues
+        try {
+            // Deep clone to avoid modifying original data
+            state.missions = JSON.parse(JSON.stringify(MISSIONS_DATA));
+            console.log('✅ Missions loaded:', state.missions.length);
+            
+            // Render immediately and also after delay to ensure DOM is ready
+            this.renderMissions();
+            setTimeout(() => {
+                this.renderMissions();
+            }, 100);
+        } catch (error) {
+            console.error('❌ Failed to load missions:', error);
+            state.missions = [];
+            // Show error message
+            const grid = document.getElementById('missionsGrid');
+            if (grid) {
+                grid.innerHTML = '<div style="text-align: center; padding: 40px; color: #FF6B9D;">Failed to load missions. Please check console for details.</div>';
+            }
+        }
+    }
+
+    renderMissions() {
+        const grid = document.getElementById('missionsGrid');
+        if (!grid) {
+            console.warn('missionsGrid element not found, retrying...');
+            // Retry after a short delay
+            setTimeout(() => {
+                const retryGrid = document.getElementById('missionsGrid');
+                if (retryGrid) {
+                    this.renderMissions();
+                }
+            }, 100);
+            return;
+        }
+        
+        grid.innerHTML = '';
+
+        if (state.missions.length === 0) {
+            grid.innerHTML = '<div style="text-align: center; padding: 40px; color: var(--color-text-light);">Loading missions...</div>';
+            // Try to load missions again
+            this.loadMissions();
+            return;
+        }
+
+        console.log('Rendering', state.missions.length, 'missions');
+        state.missions.forEach(mission => {
+            const card = this.createMissionCard(mission);
+            grid.appendChild(card);
+        });
+    }
+
+    createMissionCard(mission) {
+        const card = document.createElement('div');
+        card.className = 'mission-card';
+        if (mission.status === 'locked') {
+            card.style.opacity = '0.6';
+        }
+
+        const completedSteps = mission.steps.filter(s => s.completed).length;
+        const totalSteps = mission.steps.length;
+        const progress = Math.round((completedSteps / totalSteps) * 100);
+
+        card.innerHTML = `
+            <div class="mission-header">
+                <div class="mission-title">${mission.title}</div>
+                <div class="mission-badge">${mission.status.toUpperCase()}</div>
+            </div>
+            <div class="mission-description">${mission.description}</div>
+            <div class="mission-steps">
+                ${mission.steps.map(step => `
+                    <div class="mission-step ${step.completed ? 'completed' : ''}">
+                        <div class="step-checkbox"></div>
+                        <span>${step.text}</span>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="mission-progress">
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: ${progress}%"></div>
+                </div>
+                <div class="progress-text">${progress}% Complete</div>
+            </div>
+            <div style="margin-top: 12px; font-size: 12px; color: var(--color-violet);">
+                Reward: ${mission.reward}
+            </div>
+        `;
+
+        // Add click handler for active missions
+        if (mission.status === 'active') {
+            card.addEventListener('click', () => {
+                this.startMission(mission);
+            });
+        }
+
+        return card;
+    }
+
+    startMission(mission) {
+        showToast(`Starting mission: ${mission.title}`, 'success');
+        addActivity(`Started mission: ${mission.title}`);
+        switchTab('terminal');
+    }
+}
+
+// ============================================
+// Logs System
+// ============================================
+
+function updateLogsDisplay() {
+    const logsContent = document.getElementById('logsContent');
+    logsContent.innerHTML = '';
+
+    state.logs.forEach(log => {
+        const entry = document.createElement('div');
+        entry.className = 'log-entry';
+        
+        const time = new Date(log.time).toLocaleString('id-ID');
+        entry.innerHTML = `
+            <span class="log-time">[${time}]</span>
+            <span class="log-level ${log.level.toLowerCase()}">[${log.level}]</span>
+            <span class="log-message">${log.message}</span>
+        `;
+        
+        logsContent.appendChild(entry);
+    });
+
+    logsContent.scrollTop = logsContent.scrollHeight;
+}
+
+// ============================================
+// Tab Navigation
+// ============================================
+
+function initTabNavigation() {
+    // Sidebar navigation
+    const navItems = document.querySelectorAll('.nav-item');
+    navItems.forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            const tab = item.dataset.tab;
+            switchTab(tab);
+            
+            // Update active states
+            navItems.forEach(ni => ni.classList.remove('active'));
+            item.classList.add('active');
+        });
+    });
+}
+
+function switchTab(tabName) {
+    // Hide all panels
+    document.querySelectorAll('.tab-panel').forEach(panel => {
+        panel.classList.remove('active');
+    });
+
+    // Show selected panel
+    const panel = document.getElementById(`${tabName}-panel`);
+    if (panel) {
+        panel.classList.add('active');
+        state.currentTab = tabName;
+    }
+    
+    // Update dashboard when switching to it
+    if (tabName === 'dashboard') {
+        updateDashboard();
+    }
+    
+    // Re-render missions when switching to missions tab
+    if (tabName === 'missions') {
+        // Ensure missions are loaded and rendered
+        if (missionSystem) {
+            // If missions not loaded yet, load them
+            if (state.missions.length === 0) {
+                missionSystem.loadMissions();
+            } else {
+                // Just re-render
+                setTimeout(() => {
+                    missionSystem.renderMissions();
+                }, 50);
+            }
+        }
+    }
+    
+    // Focus terminal input when terminal tab is active
+    if (tabName === 'terminal') {
+        setTimeout(() => {
+            document.getElementById('terminalInput')?.focus();
+        }, 100);
+    }
+}
+
+// ============================================
+// Toast Notification
+// ============================================
+
+function showToast(message, type = 'info') {
+    const toast = document.getElementById('toast');
+    toast.textContent = message;
+    toast.className = `toast ${type} show`;
+
+    setTimeout(() => {
+        toast.classList.remove('show');
+    }, 3000);
+}
+
+// ============================================
+// Dashboard System
+// ============================================
+
+function updateDashboard() {
+    document.getElementById('statXP').textContent = state.xp;
+    document.getElementById('statLevel').textContent = state.level;
+    document.getElementById('statMissions').textContent = state.completedMissions;
+    document.getElementById('statActive').textContent = state.missions.filter(m => m.status === 'active').length;
+    
+    // Update activity list
+    const activityList = document.getElementById('activityList');
+    activityList.innerHTML = '';
+    state.activities.slice(-5).reverse().forEach(activity => {
+        const item = document.createElement('div');
+        item.className = 'activity-item';
+        const time = new Date(activity.time);
+        const timeStr = getTimeAgo(time);
+        item.innerHTML = `
+            <span class="activity-time">${timeStr}</span>
+            <span class="activity-text">${activity.text}</span>
+        `;
+        activityList.appendChild(item);
+    });
+}
+
+function addActivity(text) {
+    state.activities.push({
+        time: new Date().toISOString(),
+        text: text
+    });
+    updateDashboard();
+}
+
+function getTimeAgo(date) {
+    const now = new Date();
+    const diff = now - date;
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    
+    if (minutes < 1) return 'Just now';
+    if (minutes < 60) return `${minutes}m ago`;
+    if (hours < 24) return `${hours}h ago`;
+    return `${days}d ago`;
+}
+
+function addXP(amount) {
+    state.xp += amount;
+    
+    // Level up calculation (100 XP per level)
+    const newLevel = Math.floor(state.xp / 100) + 1;
+    if (newLevel > state.level) {
+        state.level = newLevel;
+        showToast(`Level Up! You are now level ${state.level}`, 'success');
+        addActivity(`Leveled up to level ${state.level}!`);
+    }
+    
+    updateDashboard();
+    updateProfile();
+}
+
+// ============================================
+// Mission Completion Logic
+// ============================================
+
+function completeMissionStep(missionId, stepId) {
+    const mission = state.missions.find(m => m.id === missionId);
+    if (!mission) return;
+    
+    const step = mission.steps.find(s => s.id === stepId);
+    if (!step || step.completed) return;
+    
+    step.completed = true;
+    
+    // Update progress
+    const completedSteps = mission.steps.filter(s => s.completed).length;
+    const totalSteps = mission.steps.length;
+    mission.progress = Math.round((completedSteps / totalSteps) * 100);
+    
+    // Re-render missions
+    if (missionSystem) {
+        missionSystem.renderMissions();
+    }
+    
+    // Check if mission is complete
+    const allCompleted = mission.steps.every(s => s.completed);
+    if (allCompleted && mission.status === 'active') {
+        completeMission(mission);
+    }
+}
+
+function completeMission(mission) {
+    mission.status = 'completed';
+    state.completedMissions++;
+    
+    // Award XP
+    const xpMatch = mission.reward.match(/\d+/);
+    const xpReward = xpMatch ? parseInt(xpMatch[0]) : 50;
+    addXP(xpReward);
+    
+    showToast(`Mission completed! +${xpReward} XP`, 'success');
+    addActivity(`Completed mission: ${mission.title} (+${xpReward} XP)`);
+    
+    // Unlock next mission if exists
+    const missionIndex = state.missions.findIndex(m => m.id === mission.id);
+    if (missionIndex < state.missions.length - 1) {
+        const nextMission = state.missions[missionIndex + 1];
+        if (nextMission.status === 'locked') {
+            nextMission.status = 'active';
+            showToast(`New mission unlocked: ${nextMission.title}`, 'info');
+            if (missionSystem) {
+                missionSystem.renderMissions();
+            }
+        }
+    }
+}
+
+// ============================================
+// Settings Modal
+// ============================================
+
+function initSettingsModal() {
+    const settingsBtn = document.getElementById('settingsBtn');
+    const settingsModal = document.getElementById('settingsModal');
+    const settingsClose = document.getElementById('settingsClose');
+    
+    settingsBtn.addEventListener('click', () => {
+        settingsModal.classList.add('show');
+        loadSettings();
+    });
+    
+    settingsClose.addEventListener('click', () => {
+        settingsModal.classList.remove('show');
+    });
+    
+    settingsModal.addEventListener('click', (e) => {
+        if (e.target === settingsModal) {
+            settingsModal.classList.remove('show');
+        }
+    });
+    
+    // Settings controls
+    document.getElementById('soundToggle').addEventListener('change', (e) => {
+        state.settings.sound = e.target.checked;
+        saveSettings();
+    });
+    
+    document.getElementById('animationsToggle').addEventListener('change', (e) => {
+        state.settings.animations = e.target.checked;
+        document.body.style.setProperty('--transition-fast', e.target.checked ? '0.1s ease' : '0s');
+        document.body.style.setProperty('--transition-normal', e.target.checked ? '0.2s ease' : '0s');
+        saveSettings();
+    });
+    
+    document.getElementById('autosaveToggle').addEventListener('change', (e) => {
+        state.settings.autosave = e.target.checked;
+        saveSettings();
+    });
+    
+    document.getElementById('fontSizeSelect').addEventListener('change', (e) => {
+        state.settings.fontSize = parseInt(e.target.value);
+        document.querySelector('.terminal-body').style.fontSize = `${e.target.value}px`;
+        document.querySelector('.terminal-input').style.fontSize = `${e.target.value}px`;
+        saveSettings();
+    });
+}
+
+function loadSettings() {
+    document.getElementById('soundToggle').checked = state.settings.sound;
+    document.getElementById('animationsToggle').checked = state.settings.animations;
+    document.getElementById('autosaveToggle').checked = state.settings.autosave;
+    document.getElementById('fontSizeSelect').value = state.settings.fontSize;
+}
+
+function saveSettings() {
+    if (state.settings.autosave) {
+        localStorage.setItem('softHackerSettings', JSON.stringify(state.settings));
+    }
+}
+
+function loadSavedSettings() {
+    const saved = localStorage.getItem('softHackerSettings');
+    if (saved) {
+        state.settings = { ...state.settings, ...JSON.parse(saved) };
+        loadSettings();
+    }
+}
+
+// ============================================
+// Profile Modal
+// ============================================
+
+function initProfileModal() {
+    const profileBtn = document.getElementById('profileBtn');
+    const profileModal = document.getElementById('profileModal');
+    const profileClose = document.getElementById('profileClose');
+    
+    profileBtn.addEventListener('click', () => {
+        profileModal.classList.add('show');
+        updateProfile();
+    });
+    
+    profileClose.addEventListener('click', () => {
+        profileModal.classList.remove('show');
+    });
+    
+    profileModal.addEventListener('click', (e) => {
+        if (e.target === profileModal) {
+            profileModal.classList.remove('show');
+        }
+    });
+}
+
+function updateProfile() {
+    document.getElementById('profileLevel').textContent = state.level;
+    document.getElementById('profileXP').textContent = state.xp;
+    document.getElementById('profileMissions').textContent = `${state.completedMissions}/${state.missions.length}`;
+}
+
+// ============================================
+// Theme Toggle
+// ============================================
+
+function initThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('click', () => {
+        state.theme = state.theme === 'light' ? 'dark' : 'light';
+        document.body.setAttribute('data-theme', state.theme);
+        showToast(`Switched to ${state.theme} theme`, 'info');
+    });
+}
+
+// ============================================
+// Inbox System
+// ============================================
+
+function initInbox() {
+    const inboxList = document.getElementById('inboxList');
+    inboxList.innerHTML = '';
+    
+    state.messages.forEach(message => {
+        const item = document.createElement('div');
+        item.className = `inbox-item ${message.read ? '' : 'unread'}`;
+        const time = new Date(message.time);
+        const timeStr = getTimeAgo(time);
+        
+        item.innerHTML = `
+            <div class="inbox-icon">📧</div>
+            <div class="inbox-content">
+                <div class="inbox-header">
+                    <span class="inbox-sender">${message.sender}</span>
+                    <span class="inbox-time">${timeStr}</span>
+                </div>
+                <div class="inbox-subject">${message.subject}</div>
+                <div class="inbox-preview">${message.preview}</div>
+            </div>
+        `;
+        
+        item.addEventListener('click', () => {
+            message.read = true;
+            item.classList.remove('unread');
+            showToast(`Message: ${message.subject}`, 'info');
+        });
+        
+        inboxList.appendChild(item);
+    });
+}
+
+// ============================================
+// System Tools Interactivity
+// ============================================
+
+function initSystemTools() {
+    const toolCards = document.querySelectorAll('.tool-card');
+    toolCards.forEach(card => {
+        card.addEventListener('click', () => {
+            const toolName = card.querySelector('.tool-name').textContent;
+            switchTab('terminal');
+            setTimeout(() => {
+                const terminal = document.getElementById('terminalInput');
+                if (toolName === 'Network Scanner') {
+                    terminal.value = 'scan';
+                    terminal.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+                } else if (toolName === 'Password Cracker') {
+                    terminal.value = 'bruteforce';
+                    terminal.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+                } else if (toolName === 'Signal Interceptor') {
+                    terminal.value = 'scan';
+                    terminal.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+                } else if (toolName === 'Firewall Bypass') {
+                    terminal.value = 'decrypt firewall.enc';
+                    terminal.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+                }
+            }, 100);
+        });
+    });
+}
+
+// ============================================
+// Welcome Screen
+// ============================================
+
+function closeWelcome() {
+    const welcomeScreen = document.getElementById('welcomeScreen');
+    const dashboardContent = document.getElementById('dashboardContent');
+    
+    if (welcomeScreen && dashboardContent) {
+        welcomeScreen.style.display = 'none';
+        dashboardContent.style.display = 'block';
+        updateDashboard();
+    }
+    
+    // Save that user has seen welcome
+    localStorage.setItem('softHackerWelcomeSeen', 'true');
+}
+
+function checkWelcomeScreen() {
+    const seen = localStorage.getItem('softHackerWelcomeSeen');
+    if (seen === 'true') {
+        closeWelcome();
+    }
+}
+
+// ============================================
+// Initialization
+// ============================================
+
+let terminal;
+let missionSystem;
+
+function init() {
+    // Load saved settings
+    loadSavedSettings();
+    
+    // Initialize terminal
+    terminal = new Terminal();
+    
+    // Initialize mission system
+    missionSystem = new MissionSystem();
+    
+    // Initialize tab navigation
+    initTabNavigation();
+    
+    // Initialize theme toggle
+    initThemeToggle();
+    
+    // Initialize modals
+    initSettingsModal();
+    initProfileModal();
+    
+    // Initialize inbox
+    initInbox();
+    
+    // Initialize system tools
+    initSystemTools();
+    
+    // Add initial logs
+    state.logs.push({
+        time: new Date().toISOString(),
+        level: 'INFO',
+        message: 'System initialized successfully ♡'
+    });
+    state.logs.push({
+        time: new Date().toISOString(),
+        level: 'SUCCESS',
+        message: 'Terminal ready for commands'
+    });
+    
+    updateLogsDisplay();
+    updateDashboard();
+    
+    // Check welcome screen
+    checkWelcomeScreen();
+    
+    // Ensure missions are rendered after a short delay (for async loading)
+    setTimeout(() => {
+        if (missionSystem && state.missions.length > 0) {
+            missionSystem.renderMissions();
+        }
+    }, 200);
+    
+    // Focus terminal input when terminal tab is active
+    const terminalInput = document.getElementById('terminalInput');
+    if (state.currentTab === 'terminal') {
+        terminalInput.focus();
+    }
+    
+    console.log('♡ Soft Hacker OS initialized ♡');
+    console.log('Missions count:', state.missions.length);
+}
+
+// Start when DOM is ready
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+} else {
+    init();
+}
+

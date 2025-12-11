@@ -1,0 +1,153 @@
+[
+    {
+        "id": "mission-01",
+        "title": "Recover Lost Password",
+        "description": "A user has forgotten their password and needs your help to recover it. Use brute force techniques to crack the encrypted password file.",
+        "status": "active",
+        "progress": 0,
+        "steps": [
+            {
+                "id": "step-1",
+                "text": "Scan for password files in the system",
+                "completed": false
+            },
+            {
+                "id": "step-2",
+                "text": "Decrypt the password hash",
+                "completed": false
+            },
+            {
+                "id": "step-3",
+                "text": "Run brute force attack",
+                "completed": false
+            },
+            {
+                "id": "step-4",
+                "text": "Recover and verify password",
+                "completed": false
+            }
+        ],
+        "reward": "50 XP + Hacker Badge"
+    },
+    {
+        "id": "mission-02",
+        "title": "Intercept CuteChat Messages",
+        "description": "Intercept encrypted messages from the CuteChat application. Decode the communication protocol and extract the conversation data.",
+        "status": "active",
+        "progress": 25,
+        "steps": [
+            {
+                "id": "step-1",
+                "text": "Locate CuteChat network traffic",
+                "completed": true
+            },
+            {
+                "id": "step-2",
+                "text": "Capture encrypted packets",
+                "completed": false
+            },
+            {
+                "id": "step-3",
+                "text": "Decode encryption protocol",
+                "completed": false
+            },
+            {
+                "id": "step-4",
+                "text": "Extract message content",
+                "completed": false
+            }
+        ],
+        "reward": "75 XP + Interceptor Badge"
+    },
+    {
+        "id": "mission-03",
+        "title": "Decrypt Pastel Archive",
+        "description": "A mysterious pastel-colored archive has been discovered. Break through its encryption layers and reveal its contents.",
+        "status": "active",
+        "progress": 50,
+        "steps": [
+            {
+                "id": "step-1",
+                "text": "Analyze archive structure",
+                "completed": true
+            },
+            {
+                "id": "step-2",
+                "text": "Identify encryption method",
+                "completed": true
+            },
+            {
+                "id": "step-3",
+                "text": "Crack first encryption layer",
+                "completed": false
+            },
+            {
+                "id": "step-4",
+                "text": "Extract archive contents",
+                "completed": false
+            }
+        ],
+        "reward": "100 XP + Decryptor Badge"
+    },
+    {
+        "id": "mission-04",
+        "title": "Bypass Firewall v3.1",
+        "description": "The latest firewall version is blocking all access attempts. Find vulnerabilities and create a bypass method.",
+        "status": "active",
+        "progress": 0,
+        "steps": [
+            {
+                "id": "step-1",
+                "text": "Scan firewall ports",
+                "completed": false
+            },
+            {
+                "id": "step-2",
+                "text": "Identify security gaps",
+                "completed": false
+            },
+            {
+                "id": "step-3",
+                "text": "Exploit vulnerabilities",
+                "completed": false
+            },
+            {
+                "id": "step-4",
+                "text": "Establish secure connection",
+                "completed": false
+            }
+        ],
+        "reward": "125 XP + Firewall Master Badge"
+    },
+    {
+        "id": "mission-05",
+        "title": "Network Intrusion Detection",
+        "description": "Detect and analyze suspicious network activity. Identify potential threats and secure the system.",
+        "status": "locked",
+        "progress": 0,
+        "steps": [
+            {
+                "id": "step-1",
+                "text": "Monitor network traffic",
+                "completed": false
+            },
+            {
+                "id": "step-2",
+                "text": "Identify anomalies",
+                "completed": false
+            },
+            {
+                "id": "step-3",
+                "text": "Trace threat source",
+                "completed": false
+            },
+            {
+                "id": "step-4",
+                "text": "Implement countermeasures",
+                "completed": false
+            }
+        ],
+        "reward": "150 XP + Security Expert Badge"
+    }
+]
+
